@@ -3,6 +3,7 @@ import Layout from '../Layout';
 import { showError, showLoading } from '../../utils/messages';
 import { login } from '../../api/apiAuth';
 import { Redirect } from 'react-router-dom';
+import { authenticate } from '../../utils/auth';
 
 
 const Login = () => {
@@ -33,15 +34,17 @@ const Login = () => {
         });
         login({ email, password })
             .then(response => {
-                setValues({
-                    email: '',
-                    password: '',
-                    error: false,
-                    loading: false,
-                    disabled: false,
-                    success: true,
-                    redirect: true
-                })
+                authenticate(response.data.token, () => {
+                    setValues({
+                        email: '',
+                        password: '',
+                        error: false,
+                        loading: false,
+                        disabled: false,
+                        success: true,
+                        redirect: true
+                    })
+                });
             })
             .catch(err => {
                 let errMsg = 'Something went wrong'
