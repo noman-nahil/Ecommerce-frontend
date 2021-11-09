@@ -3,7 +3,7 @@ import Layout from '../Layout';
 import { showError, showLoading } from '../../utils/messages';
 import { login } from '../../api/apiAuth';
 import { Redirect } from 'react-router-dom';
-import { authenticate } from '../../utils/auth';
+import { authenticate, isAuthenticate, userInfo } from '../../utils/auth';
 
 
 const Login = () => {
@@ -74,8 +74,8 @@ const Login = () => {
         </form>
     );
     const redirectUser = () => {
-        if (redirect) return <Redirect to="/" />
-
+        if (redirect) return <Redirect to={`${userInfo().role}/dashboard`} />
+        if (isAuthenticate()) return <Redirect to="/" />
     }
     return (
         <Layout title="Login Page" className="container col-md-8 offset-md-2">

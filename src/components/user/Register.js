@@ -3,7 +3,8 @@ import Layout from '../Layout';
 import { showError, showLoading } from '../../utils/messages';
 import { register } from '../../api/apiAuth';
 import { Link } from 'react-router-dom';
-
+import { isAuthenticate } from '../../utils/auth';
+import { Redirect } from 'react-router-dom';
 
 const Register = () => {
     const [values, setValues] = useState({
@@ -88,6 +89,7 @@ const Register = () => {
     }
     return (
         <Layout title="Registration Page" className="container col-md-8 offset-md-2">
+            {isAuthenticate() ? <Redirect to="/" /> : ""}
             {showSuccess()}
             {showLoading(loading)}
             {showError(error, error)}

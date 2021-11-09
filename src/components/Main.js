@@ -6,6 +6,7 @@ import Register from './user/Register';
 import PrivateRoute from '../components/protected/PrivateRoute'
 import AdminRoute from '../components/protected/AdminRoute';
 import AdminDashboard from './admin/AdminDashboard';
+import CreateCategory from './admin/CreateCategory';
 
 const Main = () => {
     return (
@@ -20,6 +21,10 @@ const Main = () => {
                 <AdminRoute path="/admin/dashboard">
                     <AdminDashboard />
                 </AdminRoute>
+                <AdminRoute path="/admin/create/category">
+                    <CreateCategory />
+                </AdminRoute>
+                <Redirect to="/" />
             </Switch>
         </div>
     )
