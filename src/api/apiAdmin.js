@@ -10,3 +10,18 @@ export const createCategory = (token, data) => {
         }
     })
 }
+
+export const getCategories = () => {
+    return axios.get(`${API}/category`)
+}
+
+
+export const createProduct = (token, data) => {
+    return axios.post(`${API}/product`, data, {
+        headers: {
+            "Content-Type": 'application/json',
+            "Authorization": `Bearer ${token}`
+        }
+    })
+}
+
