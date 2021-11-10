@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { API } from '../../utils/config';
 
 const Card = ({ product }) => {
@@ -16,6 +16,11 @@ const Card = ({ product }) => {
         objectFit: "cover",
         objectPosition: "0px 0px"
     }
+    const history = useHistory();
+
+    const viewProduct = () => {
+        history.push(`/product/${product._id}`);
+    }
     return (
         <div className="col-md-3 col-sm-4 col-xs-12 mb-3">
             <div className="card">
@@ -24,16 +29,18 @@ const Card = ({ product }) => {
                     alt={product.name}
                     style={imgStyle}
                     className="card-img-top"
+                    onClick={viewProduct}
                 />
                 <div className="card-body">
                     <div style={{ minHeight: "3em" }}>
-                        <p style={titleStyle}>{product.name}</p>
+                        <p style={titleStyle} onClick={viewProduct} style={{ cursor: 'pointer' }}>{product.name}</p>
                     </div>
                     <span style={{ fontSize: 20 }}>&#2547;</span>{product.price}
                     <p>{product.quantity ? (<span class="badge badge-pill badge-primary">In Stock</span>) : (<span class="badge badge-pill badge-danger">Out of Stock</span>)}</p>
-                    <Link to={`/product/${product._id}`}>
+                    <button className="btn btn-outline-warning btn-sm" onClick={viewProduct}>View Product</button>
+                    {/* <Link to={`/product/${product._id}`}>
                         <button className="btn btn-outline-warning btn-sm">View Product</button>
-                    </Link>
+                    </Link> */}
                     {product.quantity ? <>
                         &nbsp;<button className="btn btn-outline-primary btn-sm" >Add to Cart</button>
                     </> : ""}
