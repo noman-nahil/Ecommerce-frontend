@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { getCategories, getFilterProducts, getProducts } from "../../api/apiProduct";
 import { showError, showSuccess } from "../../utils/messages";
+import { prices } from "../../utils/prices";
 import Layout from "../Layout";
 import Card from "./Card";
 import CheckBox from "./CheckBox";
+import RadioBox from "./RadioBox";
 
 
 const Home = () => {
@@ -19,6 +21,17 @@ const Home = () => {
         category: [],
         price: []
     })
+    const [categoryToggle, setCategoryToggle] = useState(false)
+    const [priceToggle, setPriceToggle] = useState(false)
+
+    const catToggle = () => {
+        setCategoryToggle(!categoryToggle)
+        //console.log(isNavOpen)
+    }
+    const pToggle = () => {
+        setPriceToggle(!priceToggle)
+        //console.log(isNavOpen)
+    }
 
     useEffect(() => {
         getProducts(sortBy, order, limit)
@@ -34,6 +47,16 @@ const Home = () => {
         if (filterBy === 'category') {
             newFilters[filterBy] = myFilters
         }
+        if (filterBy === 'price') {
+            const data = prices;
+            let arr = [];
+            for (let i in data) {
+                if (data[i].id === parseInt(myFilters)) {
+                    arr = data[i].arr
+                }
+            }
+            newFilters[filterBy] = arr
+        }
         setFilters(newFilters);
         getFilterProducts(skip, limit, newFilters, order, sortBy)
             .then(response => setProducts(response.data))
@@ -44,8 +67,28 @@ const Home = () => {
             <>
                 <div className="row">
                     <div className="col-sm-3">
-                        <h5>Filter By Categories</h5>
-                        <ul><CheckBox categories={categories} handleFilters={myFilters => handleFilters(myFilters, 'category')} /></ul>
+                        <button class="btn btn-primary mb-2 " onClick={catToggle}>
+                            Filter
+                        </button>
+                    </div>
+
+                    <div className="col-sm-3">
+                        <label className={categoryToggle ? "" : "collapse"}>Category</label>
+                        <ul className={categoryToggle ? "" : "collapse"}>
+                            <CheckBox
+                                categories={categories}
+                                handleFilters={myFilters => handleFilters(myFilters, 'category')}
+                            />
+                        </ul>
+                    </div>
+                    <div className="col-sm-5" >
+                        <label className={categoryToggle ? "row" : "collapse"}>Price</label>
+                        <div className={categoryToggle ? "row" : "collapse"} >
+                            <RadioBox
+                                prices={prices}
+                                handleFilters={myFilters => handleFilters(myFilters, 'price')}
+                            />
+                        </div>
                     </div>
                 </div>
             </>
