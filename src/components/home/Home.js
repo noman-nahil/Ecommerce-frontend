@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import { addToCart } from "../../api/apiOrder";
 import { getCategories, getFilterProducts, getProducts } from "../../api/apiProduct";
+import { isAuthenticate, userInfo } from "../../utils/auth";
 import { showError, showSuccess } from "../../utils/messages";
 import { prices } from "../../utils/prices";
 import Layout from "../Layout";
@@ -42,6 +44,30 @@ const Home = () => {
             .catch(err => setError('Failed to load categories'))
     }, [])
 
+
+    const handleToCart = product => () => {
+        if (isAuthenticate()) {
+            setError(false);
+            setSuccess(false);
+            const user = userInfo();
+            const cardItem = {
+                user: user._id,
+                product: product._id,
+                price: product.price
+            }
+            addToCart(user.token, cardItem)
+                .then(response => setSuccess(true))
+                .catch(err => {
+                    if (err.response) setError(err.response.data)
+                    else setError("Adding to cart failed!")
+                })
+        }
+        else {
+            setSuccess(false);
+            setError("Please Login fast");
+        }
+
+    }
     const handleFilters = (myFilters, filterBy) => {
         const newFilters = { ...filters }
         if (filterBy === 'category') {
@@ -82,7 +108,7 @@ const Home = () => {
                         </ul>
                     </div>
                     <div className="col-sm-5" >
-                        <label className={categoryToggle ? "row" : "collapse"}>Price</label>
+                        <label className={categoryToggle ? "" : "collapse"}>Price</label>
                         <div className={categoryToggle ? "row" : "collapse"} >
                             <RadioBox
                                 prices={prices}
@@ -98,12 +124,10 @@ const Home = () => {
         <div>
             <Layout title="Home Page" className="container-fluid">
                 {showFilters()}
-                <div style={{ width: "100px" }}>
-                    {showError(error, error)}
-                    {showSuccess(success, "Added to cart successfully")}
-                </div>
+                {showError(error, error)}
+                {showSuccess(success, "Added to cart successfully")}
                 <div className="row">
-                    {products && products.map(product => <Card product={product} key={product._id} />)}
+                    {products && products.map(product => <Card product={product} key={product._id} handleToCart={handleToCart(product)} />)}
                 </div>
 
             </Layout>

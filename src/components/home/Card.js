@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { API } from '../../utils/config';
 
-const Card = ({ product }) => {
+const Card = ({ product, handleToCart }) => {
     const titleStyle = {
         display: "block",
         textOverflow: "ellipsis",
@@ -37,12 +37,12 @@ const Card = ({ product }) => {
                     </div>
                     <span style={{ fontSize: 20 }}>&#2547;</span>{product.price}
                     <p>{product.quantity ? (<span class="badge badge-pill badge-primary">In Stock</span>) : (<span class="badge badge-pill badge-danger">Out of Stock</span>)}</p>
-                    <button className="btn btn-outline-warning btn-sm" onClick={viewProduct}>View Product</button>
+                    <button className="btn btn-outline-warning btn-sm mb-1" onClick={viewProduct}>View Product</button>
                     {/* <Link to={`/product/${product._id}`}>
                         <button className="btn btn-outline-warning btn-sm">View Product</button>
                     </Link> */}
                     {product.quantity ? <>
-                        &nbsp;<button className="btn btn-outline-primary btn-sm" >Add to Cart</button>
+                        &nbsp;<button className="btn btn-outline-primary btn-sm mb-1" onClick={handleToCart} >Add to Cart</button>
                     </> : ""}
                 </div>
             </div>

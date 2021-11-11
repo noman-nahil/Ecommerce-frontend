@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { addToCart } from "../../api/apiOrder";
 import { getProductDetails } from "../../api/apiProduct";
+import { isAuthenticate, userInfo } from "../../utils/auth";
 import { API } from "../../utils/config";
 import { showSuccess, showError } from "../../utils/messages";
 import Layout from "../Layout";
@@ -17,6 +19,29 @@ const ProductDetails = (props) => {
             .then(response => setProduct(response.data))
             .catch(err => setError("Failed to load products"))
     })
+    const handleToCart = product => () => {
+        if (isAuthenticate()) {
+            setError(false);
+            setSuccess(false);
+            const user = userInfo();
+            const cardItem = {
+                user: user._id,
+                product: product._id,
+                price: product.price
+            }
+            addToCart(user.token, cardItem)
+                .then(response => setSuccess(true))
+                .catch(err => {
+                    if (err.response) setError(err.response.data)
+                    else setError("Adding to cart failed!")
+                })
+        }
+        else {
+            setSuccess(false);
+            setError("Please Login fast");
+        }
+
+    }
 
     return (
         <Layout title="Product Page">
@@ -45,7 +70,7 @@ const ProductDetails = (props) => {
                     <p>{product.quantity ? (<span class="badge badge-pill badge-primary">In Stock</span>) : (<span class="badge badge-pill badge-danger">Out of Stock</span>)}</p>
                     <p>{product.description}</p>
                     {product.quantity ? <>
-                        &nbsp;<button className="btn btn-outline-primary btn-md">Add to Cart</button>
+                        &nbsp;<button className="btn btn-outline-primary btn-md" onClick={handleToCart(product)}>Add to Cart</button>
                     </> : ""}
                 </div>
             </div>
