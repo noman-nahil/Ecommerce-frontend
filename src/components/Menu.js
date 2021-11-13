@@ -31,6 +31,9 @@ const Menu = ({ history }) => {
                         <Link className="nav-link" to={`/${userInfo().role}/dashboard`} style={isActive(history, `/${userInfo().role}/dashboard`)}>Dashboard</Link>
                     </li>
                     <li className="nav-item">
+                        <Link className="nav-link" style={isActive(history, `/cart`)} to={`/cart`}>Cart</Link>
+                    </li>
+                    <li className="nav-item">
                         <span className="nav-link" style={{ cursor: 'pointer', color: 'grey' }} onClick={() => {
                             singOut(() => {
                                 history.push('/login');

@@ -9,6 +9,7 @@ import AdminDashboard from './admin/AdminDashboard';
 import CreateCategory from './admin/CreateCategory';
 import CreateProduct from './admin/CreateProduct';
 import ProductDetails from './home/ProductDetails';
+import Cart from './order/Cart';
 
 const Main = () => {
     return (
@@ -20,6 +21,9 @@ const Main = () => {
                 <Route path="/product/:id" exact component={ProductDetails} />
                 <PrivateRoute path="/user/dashboard">
                     <Dashboard />
+                </PrivateRoute>
+                <PrivateRoute path="/cart">
+                    <Cart />
                 </PrivateRoute>
                 <AdminRoute path="/admin/dashboard">
                     <AdminDashboard />
